@@ -1,0 +1,107 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import { CONNECTOR_URL } from "../consts";
+
+const claudeCode = `claude mcp add --transport http iamed ${CONNECTOR_URL}`;
+
+const avisos = [
+  {
+    titulo: "Somente leitura, só o que está publicado",
+    texto: "As três tools são de leitura. O servidor lê o espelho com a chave anon do Supabase, que não enxerga dado de usuário, e recusa subir com chave secreta ou de service role. Rascunho não existe no espelho.",
+  },
+  {
+    titulo: "Sem garantia de disponibilidade",
+    texto: "Roda numa máquina pessoal exposta pelo Tailscale Funnel. Pode sair do ar, reiniciar ou mudar de endereço sem aviso. Se você depende dele, rode o seu.",
+  },
+  {
+    titulo: "Sem autenticação, com limites",
+    texto: "60 requisições por minuto por origem e 300 no total; acima disso, HTTP 429 com Retry-After de 60 segundos. Corpo de requisição até 64 KB e resposta abaixo de 100 KB. Parâmetro fora da faixa é recusado.",
+  },
+  {
+    titulo: "Base com até 5 minutos de atraso",
+    texto: "O servidor guarda a base em memória por 5 minutos, e o espelho do app também sincroniza a cada 5 minutos. Se o Supabase falhar, serve a última leitura boa e diz isso no aviso.",
+  },
+  {
+    titulo: "Conteúdo de terceiros",
+    texto: "Títulos, resumos e tags vêm de papers, reportagens e repositórios de outras pessoas. Toda resposta traz um aviso para o modelo tratar esse texto como conteúdo a citar, não como instrução.",
+  },
+  {
+    titulo: "O que você consulta passa por lá",
+    texto: "Os parâmetros de cada chamada chegam ao servidor do autor. O registro de uso guarda tool, filtros, tamanho do tema, quantidade devolvida e origem com o último número do IP zerado; nunca o texto buscado nem o conteúdo devolvido.",
+  },
+];
+
+const connector = `# expor a sua própria instância como conector HTTP (escuta só no loopback)
+TRANSPORTE=streamable-http HTTP_PORTA=8107 uv run iamed-mcp
+
+# atrás de túnel ou proxy com TLS, declare o nome público
+HTTP_HOSTS_PUBLICOS=mcp.exemplo.ts.net
+
+# limites por minuto (padrões do conector hospedado)
+HTTP_LIMITE_GLOBAL_POR_MINUTO=300
+HTTP_LIMITE_POR_MINUTO=60`;
+---
+
+<section id="modos" class="border-b border-neutral-900">
+  <div class="mx-auto max-w-4xl px-6 py-20">
+    <p class="text-sm font-semibold uppercase tracking-wider text-emerald">Dois jeitos de usar</p>
+    <h2 class="mt-3 text-2xl font-bold text-white sm:text-3xl">
+      Pelo conector hospedado, ou na sua máquina
+    </h2>
+    <p class="mt-3 max-w-2xl text-neutral-400">
+      O mesmo servidor fala stdio (local) e streamable-http (conector). Nos dois ele
+      só lê: não grava em lugar nenhum.
+    </p>
+
+    <article id="conector" class="mt-10 rounded-xl border border-emerald/25 bg-ink-800 p-5">
+      <h3 class="font-mono text-base font-semibold text-emerald">Conector hospedado</h3>
+      <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+        Há uma instância pública, no ar desde 17/10/2026 e mantida pelo autor, para
+        usar sem instalar nada. No Claude (web ou desktop): Configurações, Conectores,
+        Adicionar conector personalizado, e colar a URL abaixo.
+      </p>
+      <div class="mt-4 flex flex-col gap-4">
+        <CodeBlock code={CONNECTOR_URL} lang="text" caption="URL do conector" />
+        <CodeBlock code={claudeCode} lang="bash" caption="No Claude Code" />
+      </div>
+
+      <div class="mt-6 rounded-xl border border-amber-500/25 bg-amber-500/[0.04] p-4">
+        <p class="text-sm font-semibold uppercase tracking-wider text-amber-300">Antes de usar o conector</p>
+        <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+          {
+            avisos.map((a) => (
+              <li class="text-sm leading-relaxed text-neutral-300">
+                <span class="block font-semibold text-white">{a.titulo}</span>
+                <span>{a.texto}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </article>
+
+    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+      <article class="rounded-xl border border-neutral-800 bg-ink-800 p-5">
+        <h3 class="font-mono text-base font-semibold text-emerald">stdio (local)</h3>
+        <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+          O cliente sobe o processo na sua máquina (passo a passo abaixo). Nada fica
+          exposto na rede, e os temas que você busca não passam pelo servidor do autor:
+          a sua instância lê direto do espelho do app, com a mesma chave anon.
+        </p>
+      </article>
+
+      <article class="flex flex-col gap-4 rounded-xl border border-neutral-800 bg-ink-800 p-5">
+        <div>
+          <h3 class="font-mono text-base font-semibold text-emerald">streamable-http (o seu conector)</h3>
+          <p class="mt-2 text-sm leading-relaxed text-neutral-400">
+            Para hospedar a sua instância. O servidor escuta em 127.0.0.1:8107/mcp;
+            expor é papel de um proxy reverso com TLS ou de um túnel. Pelo claude.ai as
+            chamadas chegam dos IPs da Anthropic, por isso há um teto global além do
+            teto por origem.
+          </p>
+        </div>
+        <CodeBlock code={connector} lang="bash" />
+      </article>
+    </div>
+  </div>
+</section>

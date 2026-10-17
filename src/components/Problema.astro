@@ -1,0 +1,41 @@
+---
+const pontos = [
+  {
+    titulo: "Sai coisa demais, em lugar demais",
+    texto:
+      "Paper, notícia, podcast, evento e repositório de código sobre IA na medicina saem todo dia, em inglês e em português, cada um num canal. Saber o que saiu sobre um tema nas últimas semanas dá trabalho manual.",
+  },
+  {
+    titulo: "Citar exige a fonte, não a memória do modelo",
+    texto:
+      "Um modelo de linguagem responde sobre IA na medicina com o que aprendeu no treino, sem data e muitas vezes sem link. Para citar numa aula, num texto ou numa conversa clínica, é preciso o item real, com a fonte original.",
+  },
+  {
+    titulo: "A curadoria já existe, falta a ponte",
+    texto:
+      "O IA.med já reúne e resume esse material no app. O iamed-mcp expõe o que está publicado como ferramentas que o Claude chama, e cada resposta volta com o link do item no app e o link da fonte.",
+  },
+];
+---
+
+<section id="problema" class="border-b border-neutral-900">
+  <div class="mx-auto max-w-4xl px-6 py-20">
+    <p class="text-sm font-semibold uppercase tracking-wider text-emerald">
+      O problema
+    </p>
+    <h2 class="mt-3 text-2xl font-bold text-white sm:text-3xl">
+      Por que este projeto existe
+    </h2>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-3">
+      {
+        pontos.map((p) => (
+          <div class="rounded-xl border border-neutral-800 bg-ink-800 p-5">
+            <h3 class="text-base font-semibold text-white">{p.titulo}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-400">{p.texto}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

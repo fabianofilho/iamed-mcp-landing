@@ -1,0 +1,89 @@
+---
+import { MEDIDO_EM } from "../consts";
+
+// Totais devolvidos por listar_recentes(dias=365, tipos=[X]) no conector, em MEDIDO_EM.
+const tipos = [
+  { nome: "artigo", n: "274", desc: "Artigos" },
+  { nome: "news", n: "225", desc: "Notícias" },
+  { nome: "repo", n: "72", desc: "Repositórios de código" },
+  { nome: "episodio", n: "37", desc: "Episódios de podcast" },
+  { nome: "evento", n: "18", desc: "Eventos" },
+  { nome: "aula", n: "5", desc: "Aulas" },
+  { nome: "conferencias", n: "3", desc: "Conferências" },
+  { nome: "total", n: "634", desc: "Na janela de 365 dias" },
+];
+
+const limites = [
+  {
+    titulo: "Busca por palavra, não por significado",
+    texto:
+      "O ranqueamento casa termos do tema com título, resumo e tags. Sinônimo que não aparece no texto não é achado: se sepse não trouxer o que você queria, tente também septicemia ou o nome do modelo.",
+  },
+  {
+    titulo: "Poucos itens têm especialidade",
+    texto:
+      "O filtro de especialidade usa só a nota de relevância do app (0,7 ou mais). Em 16/10/2026 eram 94 itens com nota, e Endocrinologia, Genética e Ortopedia não tinham nenhum. Quando o filtro devolve pouco, o aviso sugere usar buscar com o tema.",
+  },
+  {
+    titulo: "Resumo não é o texto",
+    texto:
+      "O servidor entrega resumo, tags e links. O texto completo de artigos e aulas fica no app, atrás dos planos, e o resumo é da curadoria, que pode simplificar ou errar. Para citar, abra a fonte.",
+  },
+  {
+    titulo: "Aula não tem data de publicação",
+    texto:
+      "Aulas entram pela data em que chegaram ao espelho do app, não por quando foram gravadas ou lançadas. Artigos e episódios com data no futuro ficam de fora.",
+  },
+];
+---
+
+<section id="base" class="border-b border-neutral-900">
+  <div class="mx-auto max-w-4xl px-6 py-20">
+    <p class="text-sm font-semibold uppercase tracking-wider text-emerald">
+      A base e os limites
+    </p>
+    <h2 class="mt-3 text-2xl font-bold text-white sm:text-3xl">
+      O que há na base, e o que ele não faz
+    </h2>
+    <p class="mt-3 max-w-2xl text-neutral-400">
+      Quantos itens publicados cada tipo tinha nos últimos 365 dias, lidos pelo
+      próprio conector em {MEDIDO_EM} (eventos e conferências contam também os
+      próximos). A suíte do servidor tem 117 testes automatizados.
+    </p>
+
+    <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {
+        tipos.map((t) => (
+          <div class="rounded-xl border border-neutral-800 bg-ink-800 p-5">
+            <h3 class="font-mono text-sm font-semibold text-emerald">{t.nome}</h3>
+            <p class="mt-2 text-2xl font-bold text-white">{t.n}</p>
+            <p class="mt-1 text-sm leading-relaxed text-neutral-400">{t.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2">
+      {
+        limites.map((p) => (
+          <div class="rounded-xl border border-neutral-800 bg-ink-800 p-5">
+            <h3 class="text-base font-semibold text-white">{p.titulo}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-neutral-400">{p.texto}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10 rounded-xl border border-neutral-800 bg-ink-800 p-5">
+      <h3 class="text-base font-semibold text-white">O que ele não faz</h3>
+      <ul class="mt-3 grid gap-2 text-sm leading-relaxed text-neutral-400 sm:grid-cols-2">
+        <li>Não escreve nada: não favorita, não comenta, não indexa.</li>
+        <li>Não chama LLM: só lê e ranqueia em memória.</li>
+        <li>Não devolve dado de usuário do app (perfil, plano, Caderno, Salvos, comunidade).</li>
+        <li>Não mostra item que não esteja publicado.</li>
+        <li>Não entrega o texto completo de artigos e aulas.</li>
+        <li>Não busca na internet: só na base do IA.med.</li>
+      </ul>
+    </div>
+  </div>
+</section>

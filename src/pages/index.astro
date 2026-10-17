@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Problema from "../components/Problema.astro";
+import ComoFunciona from "../components/ComoFunciona.astro";
+import Tools from "../components/Tools.astro";
+import Base from "../components/Base.astro";
+import Modos from "../components/Modos.astro";
+import ComoRodar from "../components/ComoRodar.astro";
+import Footer from "../components/Footer.astro";
+
+const title = "iamed-mcp: a base do IA.med sobre IA na medicina, para o Claude";
+const description =
+  "Servidor MCP open source e somente leitura da base do IA.med: artigos, news, podcasts, aulas, eventos e repositórios sobre IA na medicina, cada um com link e fonte. Pelo conector hospedado ou instalado na sua máquina. Um projeto IA.med.";
+---
+
+<Layout title={title} description={description}>
+  <main>
+    <Hero />
+    <Problema />
+    <ComoFunciona />
+    <Tools />
+    <Base />
+    <Modos />
+    <ComoRodar />
+  </main>
+  <Footer />
+</Layout>
