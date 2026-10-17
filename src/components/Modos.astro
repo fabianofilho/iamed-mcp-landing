@@ -18,8 +18,8 @@ const avisos = [
     texto: "60 requisições por minuto por origem e 300 no total; acima disso, HTTP 429 com Retry-After de 60 segundos. Corpo de requisição até 64 KB e resposta abaixo de 100 KB. Parâmetro fora da faixa é recusado.",
   },
   {
-    titulo: "Base com até 5 minutos de atraso",
-    texto: "O servidor guarda a base em memória por 5 minutos, e o espelho do app também sincroniza a cada 5 minutos. Se o Supabase falhar, serve a última leitura boa e diz isso no aviso.",
+    titulo: "Base com até 10 minutos de atraso",
+    texto: "O espelho do app sincroniza a cada 5 minutos, e o servidor guarda a base em memória por mais 5: no pior caso, um item publicado leva 10 minutos para aparecer. Se o Supabase falhar, serve a última leitura boa e diz isso no aviso.",
   },
   {
     titulo: "Conteúdo de terceiros",
