@@ -17,7 +17,7 @@ export const PLANOS_URL = "https://app.iamed.cc/planos";
 // Data em que os exemplos e numeros desta pagina foram lidos do conector.
 export const MEDIDO_EM = "17/10/2026";
 
-// Familia de MCPs da IA.med (6 de 8 sao open source; ans e raciocinio-br sao privados).
+// Familia de MCPs da IA.med (6 de 9 sao open source; ans, raciocinio-br e omnisus-ask sao privados; omnisus sem landing).
 // SELF_SLUG marca o atual (some do rodape).
 export const SELF_SLUG = "iamed";
 export const FAMILY = [
