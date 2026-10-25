@@ -9,7 +9,7 @@ export const PROJECT = "iamed-mcp";
 // Conector hospedado oficial (Tailscale Funnel, sem garantia de uptime).
 // No ar desde 17/10/2026. Desde LOGIN_DESDE pede login com a conta do IA.med
 // (plano Residente ou acima, ou trial ativo), pela mesma regra do app.
-export const CONNECTOR_URL = "https://debian-f.tailf42a96.ts.net/iamed/mcp";
+export const CONNECTOR_URL = "https://mcp.iamed.cc/iamed/mcp";
 // Lido do journal do serviço: primeiro "login ligado" em 19/10/2026 22:14.
 export const LOGIN_DESDE = "19/10/2026";
 export const PLANOS_URL = "https://app.iamed.cc/planos";

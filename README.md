@@ -3,7 +3,7 @@
 Landing page do [`iamed-mcp`](https://github.com/fabianofilho/iamed-mcp), um
 servidor MCP somente leitura com o conteúdo publicado mais recente da base do
 IA.med sobre IA na medicina. Pode ser usado pelo conector hospedado
-(`https://debian-f.tailf42a96.ts.net/iamed/mcp`, sem garantia de
+(`https://mcp.iamed.cc/iamed/mcp`, sem garantia de
 disponibilidade) ou instalado localmente. Um projeto [IA.med](https://iamed.cc).
 
 Página estática, sem backend e sem coleta de dados de visitante.
