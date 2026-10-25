@@ -1,6 +1,6 @@
 ---
 import CodeBlock from "./CodeBlock.astro";
-import { CONNECTOR_URL } from "../consts";
+import { CONNECTOR_URL, LOGIN_DESDE, PLANOS_URL } from "../consts";
 
 const claudeCode = `claude mcp add --transport http iamed ${CONNECTOR_URL}`;
 
@@ -14,8 +14,12 @@ const avisos = [
     texto: "Roda numa máquina pessoal exposta pelo Tailscale Funnel. Pode sair do ar, reiniciar ou mudar de endereço sem aviso. Se você depende dele, rode o seu.",
   },
   {
-    titulo: "Sem autenticação, com limites",
-    texto: "60 requisições por minuto por origem e 300 no total; acima disso, HTTP 429 com Retry-After de 60 segundos. Corpo de requisição até 64 KB e resposta abaixo de 100 KB. Parâmetro fora da faixa é recusado.",
+    titulo: "Pede login com a conta do IA.med",
+    texto: `Desde ${LOGIN_DESDE}, ao adicionar o conector o Claude abre a tela de entrada do IA.med. Ele atende quem tem plano Residente ou acima, ou trial ativo, pela mesma regra do app; sem plano, a resposta é 403 com o link dos planos. O servidor só lê o seu plano: não guarda a senha nem o token.`,
+  },
+  {
+    titulo: "Com limites",
+    texto: "300 requisições por minuto por origem e 300 no total na instância hospedada (o servidor, por padrão, usa 60 por origem); acima disso, HTTP 429 com Retry-After de 60 segundos. Corpo de requisição até 64 KB e resposta abaixo de 100 KB. Parâmetro fora da faixa é recusado.",
   },
   {
     titulo: "Base com até 10 minutos de atraso",
@@ -37,9 +41,13 @@ TRANSPORTE=streamable-http HTTP_PORTA=8107 uv run iamed-mcp
 # atrás de túnel ou proxy com TLS, declare o nome público
 HTTP_HOSTS_PUBLICOS=mcp.exemplo.ts.net
 
-# limites por minuto (padrões do conector hospedado)
+# limites por minuto (padrões do servidor; a instância hospedada usa 300 e 300)
 HTTP_LIMITE_GLOBAL_POR_MINUTO=300
-HTTP_LIMITE_POR_MINUTO=60`;
+HTTP_LIMITE_POR_MINUTO=60
+
+# opcional: só atender quem entrou com a conta do IA.med (plano Residente ou acima)
+MCP_LOGIN=supabase
+MCP_LOGIN_RECURSO=https://mcp.exemplo.ts.net/iamed/mcp`;
 ---
 
 <section id="modos" class="border-b border-neutral-900">
@@ -56,9 +64,12 @@ HTTP_LIMITE_POR_MINUTO=60`;
     <article id="conector" class="mt-10 rounded-xl border border-emerald/25 bg-ink-800 p-5">
       <h3 class="font-mono text-base font-semibold text-emerald">Conector hospedado</h3>
       <p class="mt-2 text-sm leading-relaxed text-neutral-400">
-        Há uma instância pública, no ar desde 17/10/2026 e mantida pelo autor, para
+        Há uma instância hospedada, no ar desde 17/10/2026 e mantida pelo autor, para
         usar sem instalar nada. No Claude (web ou desktop): Configurações, Conectores,
-        Adicionar conector personalizado, e colar a URL abaixo.
+        Adicionar conector personalizado, e colar a URL abaixo. Ao adicionar, o Claude
+        abre o login do IA.med: o conector atende quem tem
+        <a href={PLANOS_URL} class="text-emerald hover:underline">plano Residente ou acima</a>,
+        ou trial ativo.
       </p>
       <div class="mt-4 flex flex-col gap-4">
         <CodeBlock code={CONNECTOR_URL} lang="text" caption="URL do conector" />
